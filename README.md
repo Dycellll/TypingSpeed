@@ -1,23 +1,60 @@
-This is a Kotlin Multiplatform project targeting Android, Desktop (JVM).
+# Typing Speed
 
-* [/shared](./shared/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./shared/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./shared/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./shared/src/jvmMain/kotlin)
-    folder is the appropriate location.
+A simple, cross-platform typing speed test built with **Kotlin Multiplatform (KMP)** and **Material 3**.
 
-### Running the apps
+Typing Speed lets you test how quickly and accurately you can type across three difficulty levels: **Easy, Medium, and Hard**.
 
-Use the run configurations provided by the run widget in your IDE's toolbar. You can also use these commands and options:
+## Features
 
-- Android app: `./gradlew :androidApp:assembleDebug`
-- Desktop app:
-  - Hot reload: `./gradlew :desktopApp:hotRun --auto`
-  - Standard run: `./gradlew :desktopApp:run`
+* **Typing speed tests** — See how fast you can type and improve over time.
+* **Three difficulties** — Choose between Easy, Medium, and Hard.
+* **WPM & accuracy** — Get your words per minute (WPM) and typing accuracy after every test.
+* **Scoring system** — Your score takes your WPM, accuracy, and selected difficulty into account.
+* **Test history** — Keep track of your previous results and see how you've performed.
+* **Material 3** — A clean, modern interface built with Material 3.
+* **Cross-platform** — Built with Kotlin Multiplatform, with support for Android, Linux, and Windows.
 
----
+## Screenshots
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+
+
+## Download
+
+You can find the latest builds on the [Releases](../../releases) page.
+
+| Platform | Download    |
+| -------- | ----------- |
+| Android  | `.apk`      |
+| Linux    | `.AppImage` |
+| Windows  | `.zip`      |
+
+### Android
+
+Download the `.apk` file and install it on your Android device.
+
+### Linux
+
+Download the `.AppImage` file, make it executable, and run it.
+
+### Windows
+
+Download the `.zip` file and extract it. Run `com.dycel.typingspeed.exe` from inside the extracted folder.
+
+> **Note:** Keep the Windows `.exe` inside its extracted folder. The application relies on the other files included alongside it.
+
+## Built With
+
+* **Kotlin**
+* **Kotlin Multiplatform**
+* **Compose Multiplatform**
+* **Material 3**
+
+## About
+
+Typing Speed started as a project to experiment with Kotlin Multiplatform and build something useful along the way.
+
+The goal is to keep the app simple: pick a difficulty, type the text, see how you did, and try to beat your previous score.
+
+## License
+
+
