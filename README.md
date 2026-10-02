@@ -16,6 +16,10 @@ Typing Speed lets you test how quickly and accurately you can type across three 
 
 ## Screenshots
 
+<img width="1886" height="1014" alt="image" src="https://github.com/user-attachments/assets/7f01de92-bcff-40ce-882e-b2c8b987f52d" />
+<img width="1886" height="1014" alt="image" src="https://github.com/user-attachments/assets/5e4fc964-1fe2-427e-85aa-05e7eeb6252c" />
+<img width="1886" height="1014" alt="image" src="https://github.com/user-attachments/assets/fb6108e7-47fd-4fc9-93e4-0b3dbe39c6a7" />
+<img width="1220" height="2626" alt="Screenshot_2026-10-02-18-32-22-185_com dycel typingspeed-edit" src="https://github.com/user-attachments/assets/f88cff6f-5ae6-4fce-b6cc-8542a6627495" />
 
 
 ## Download
@@ -57,4 +61,4 @@ The goal is to keep the app simple: pick a difficulty, type the text, see how yo
 
 ## License
 
-
+Typing Speed is licensed under the [MIT License](LICENSE).
