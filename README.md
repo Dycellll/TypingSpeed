@@ -1,6 +1,6 @@
 # Typing Speed
 
-A simple, cross-platform typing speed test built with **Kotlin Multiplatform (KMP)** and **Material 3**.
+A simple, cross-platform typing speed test built with **Kotlin Multiplatform (KMP)** and **Material 3**. (Although, not really following the Material 3 guidelines...)
 
 Typing Speed lets you test how quickly and accurately you can type across three difficulty levels: **Easy, Medium, and Hard**.
 
