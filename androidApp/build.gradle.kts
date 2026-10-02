@@ -39,16 +39,23 @@ android {
         release {
             isMinifyEnabled = false
 
-            signingConfig = signingConfigs.create("release") {
-                storeFile = file(
-                    project.property("TYPING_SPEED_STORE_FILE").toString()
-                )
-                storePassword =
-                    project.property("TYPING_SPEED_STORE_PASSWORD").toString()
-                keyAlias =
-                    project.property("TYPING_SPEED_KEY_ALIAS").toString()
-                keyPassword =
-                    project.property("TYPING_SPEED_KEY_PASSWORD").toString()
+            val storeFilePath = project.findProperty("TYPING_SPEED_STORE_FILE")?.toString()
+            val storePasswordValue = project.findProperty("TYPING_SPEED_STORE_PASSWORD")?.toString()
+            val keyAliasValue = project.findProperty("TYPING_SPEED_KEY_ALIAS")?.toString()
+            val keyPasswordValue = project.findProperty("TYPING_SPEED_KEY_PASSWORD")?.toString()
+
+            if (
+                storeFilePath != null &&
+                storePasswordValue != null &&
+                keyAliasValue != null &&
+                keyPasswordValue != null
+            ) {
+                signingConfig = signingConfigs.create("release") {
+                    storeFile = file(storeFilePath)
+                    storePassword = storePasswordValue
+                    keyAlias = keyAliasValue
+                    keyPassword = keyPasswordValue
+                }
             }
 
             proguardFiles(

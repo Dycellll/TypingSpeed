@@ -1,10 +1,108 @@
-name: Build Windows
+name: Build Typing Speed
 
 on:
   workflow_dispatch:
 
 jobs:
+  build-android:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Restore signing keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.TYPING_SPEED_KEYSTORE_BASE64 }}
+        run: |
+          printf "%s" "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/typing-speed-release.jks"
+
+      - name: Build signed Android APK
+        env:
+          STORE_PASSWORD: ${{ secrets.TYPING_SPEED_STORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.TYPING_SPEED_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.TYPING_SPEED_KEY_PASSWORD }}
+        run: |
+          ./gradlew clean assembleRelease \
+            -PTYPING_SPEED_STORE_FILE="$RUNNER_TEMP/typing-speed-release.jks" \
+            -PTYPING_SPEED_STORE_PASSWORD="$STORE_PASSWORD" \
+            -PTYPING_SPEED_KEY_ALIAS="$KEY_ALIAS" \
+            -PTYPING_SPEED_KEY_PASSWORD="$KEY_PASSWORD"
+
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: TypingSpeed-Android
+          path: androidApp/build/outputs/apk/release/androidApp-release.apk
+
+  build-linux:
+    name: Build Linux AppImage
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Build Linux distribution
+        run: ./gradlew :desktopApp:createDistributable
+
+      - name: Create AppImage directory
+        run: |
+          mkdir -p TypingSpeed.AppDir
+          cp -r desktopApp/build/compose/binaries/main/app/com.dycel.typingspeed TypingSpeed.AppDir/
+          cp desktopApp/src/main/resources/icon.png TypingSpeed.AppDir/typing-speed.png
+
+          printf '%s\n' \
+            '#!/bin/sh' \
+            'HERE="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"' \
+            'exec "$HERE/com.dycel.typingspeed/bin/com.dycel.typingspeed" "$@"' \
+            > TypingSpeed.AppDir/AppRun
+
+          chmod +x TypingSpeed.AppDir/AppRun
+
+          printf '%s\n' \
+            '[Desktop Entry]' \
+            'Name=Typing Speed' \
+            'Comment=Typing Speed' \
+            'Exec=AppRun' \
+            'Icon=typing-speed' \
+            'Terminal=false' \
+            'Type=Application' \
+            'Categories=Utility;' \
+            > TypingSpeed.AppDir/typing-speed.desktop
+
+      - name: Download appimagetool
+        run: |
+          wget -O appimagetool.AppImage https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
+          chmod +x appimagetool.AppImage
+
+      - name: Build AppImage
+        run: |
+          ./appimagetool.AppImage --appimage-extract-and-run \
+            TypingSpeed.AppDir \
+            TypingSpeed.AppImage
+
+      - name: Upload Linux AppImage
+        uses: actions/upload-artifact@v4
+        with:
+          name: TypingSpeed-Linux
+          path: TypingSpeed.AppImage
+
   build-windows:
+    name: Build Windows distribution
     runs-on: windows-latest
 
     steps:
@@ -20,8 +118,15 @@ jobs:
       - name: Build Windows distribution
         run: .\gradlew.bat :desktopApp:createDistributable
 
+      - name: Zip Windows distribution
+        shell: pwsh
+        run: |
+          Compress-Archive `
+            -Path "desktopApp/build/compose/binaries/main/app/com.dycel.typingspeed" `
+            -DestinationPath "TypingSpeed-Windows.zip"
+
       - name: Upload Windows distribution
         uses: actions/upload-artifact@v4
         with:
           name: TypingSpeed-Windows
-          path: desktopApp/build/compose/binaries/main/app/**
+          path: TypingSpeed-Windows.zip
